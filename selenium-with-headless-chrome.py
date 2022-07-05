@@ -12,3 +12,5 @@ driver = webdriver.Chrome(r'/opt/chrome/chromedriver', chrome_options=chrome_opt
 
 driver.get("http://python.org")
 print("page title: %s" % driver.title)
+
+driver.save_screenshot('screenshot.png')
