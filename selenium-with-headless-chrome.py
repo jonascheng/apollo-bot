@@ -1,14 +1,21 @@
 import os
+import time
+
+from datetime import datetime
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.chrome.options import Options
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-timeout = 5
+from selenium.common.exceptions import TimeoutException
+
+now = datetime.now()
+current_time = now.strftime("%H-%M-%S")
+
+timeout = 10
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -48,6 +55,10 @@ def Login():
     password_input = driver.find_element(By.NAME, 'password')
     password_input.send_keys(os.environ['PSWD'])
 
+    # debug purpose
+    if not driver.save_screenshot('/screenshots/%s-Login.png' % current_time):
+        print('save Login failed')
+
     # submit form
     form.submit()
 
@@ -59,6 +70,10 @@ def WantClockInOut1stLevel():
         WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'link-item__title')))
     except TimeoutException:
         print("Timed out waiting for page to load")
+
+    # debug purpose
+    if not driver.save_screenshot('/screenshots/%s-WantClockInOut1stLevel.png' % current_time):
+        print('save WantClockInOut1stLevel failed')
 
     # link items
     link_item = driver.find_element(By.LINK_TEXT, '我要打卡')
@@ -72,6 +87,10 @@ def WantClockInOut2ndLevel():
         WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'ta_btn_cancel')))
     except TimeoutException:
         print("Timed out waiting for page to load")
+
+    # debug purpose
+    if not driver.save_screenshot('/screenshots/%s-WantClockInOut2ndLevel.png' % current_time):
+        print('save WantClockInOut2ndLevel failed')
 
     # link_items = driver.find_elements(By.CLASS_NAME, 'ta-link-name')
     # for link_item in link_items:
@@ -91,4 +110,7 @@ Login()
 WantClockInOut1stLevel()
 WantClockInOut2ndLevel()
 
-driver.save_screenshot('screenshot.png')
+time.sleep(timeout)
+if not driver.save_screenshot('/screenshots/%s-Result.png' % current_time):
+    print('save Result failed')
+
