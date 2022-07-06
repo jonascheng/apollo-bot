@@ -92,25 +92,40 @@ def WantClockInOut2ndLevel():
     if not driver.save_screenshot('/screenshots/%s-WantClockInOut2ndLevel.png' % current_time):
         print('save WantClockInOut2ndLevel failed')
 
-    # link_items = driver.find_elements(By.CLASS_NAME, 'ta-link-name')
-    # for link_item in link_items:
-    #     if link_item.text == '我要打卡':
-    #         print(link_item.text)
-    #         link_item.click()
-
     link_items = driver.find_elements(By.CLASS_NAME, 'ta_btn_cancel')
     for link_item in link_items:
         if link_item.text != '休息開始':
-            print("你已經 %s 了" % link_item.text)
+            print("你已經點擊 [ %s ]" % link_item.text)
             link_item.click()
+
+    # check if need to overwrite clock out record
+    try:
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'win-box-button-bar')))
+    except TimeoutException:
+        print("Timed out, no need to overwrite clock out record")
+        return
+
+    btn_item = driver.find_element(By.CSS_SELECTOR, "button[class='ta_btn new__btn--fixed-height']")
+    btn_item.click()
+
+def SaveResult():
+    print("%s | SaveResult" % driver.title)
+
+    # wait for page loading
+    try:
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'new-window-title')))
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+
+    time.sleep(timeout)
+    if not driver.save_screenshot('/screenshots/%s-Result.png' % current_time):
+        print('save Result failed')
 
 # login page
 Login()
 # want to clock in/out
 WantClockInOut1stLevel()
 WantClockInOut2ndLevel()
-
-time.sleep(timeout)
-if not driver.save_screenshot('/screenshots/%s-Result.png' % current_time):
-    print('save Result failed')
+# save result
+SaveResult()
 
