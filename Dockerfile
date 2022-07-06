@@ -23,4 +23,5 @@ WORKDIR /app
 
 # copy the testing python script
 COPY selenium-with-headless-chrome.py .
-RUN python selenium-with-headless-chrome.py
+
+CMD [ "python", "selenium-with-headless-chrome.py" ]
