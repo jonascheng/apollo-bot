@@ -1,0 +1,4 @@
+set EMPLOYEE_NO=E10001
+set PSWD=your-secret
+
+python selenium-with-headless-chrome.py

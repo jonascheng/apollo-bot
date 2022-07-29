@@ -1,5 +1,6 @@
 import os
 import time
+import platform
 
 from datetime import datetime
 
@@ -21,8 +22,14 @@ chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-remote-fonts")
 
-driver = webdriver.Chrome(r'/opt/chrome/chromedriver', chrome_options=chrome_options)
+screenshots_path = '/screenshots/'
+if platform.system() == 'Windows':
+  driver = webdriver.Chrome(r'chromedriver', chrome_options=chrome_options)
+  screenshots_path = 'c:\\windows\\temp\\'
+else:
+  driver = webdriver.Chrome(r'/opt/chrome/chromedriver', chrome_options=chrome_options)
 
 driver.fullscreen_window()
 driver.get("https://asiaauth.mayohr.com/HRM/Account/Login")
@@ -56,7 +63,7 @@ def Login():
     password_input.send_keys(os.environ['PSWD'])
 
     # debug purpose
-    if not driver.save_screenshot('/screenshots/%s-Login.png' % current_time):
+    if not driver.save_screenshot('%s%s-Login.png' % (screenshots_path, current_time)):
         print('save Login failed')
 
     # submit form
@@ -72,7 +79,7 @@ def WantClockInOut1stLevel():
         print("Timed out waiting for page to load")
 
     # debug purpose
-    if not driver.save_screenshot('/screenshots/%s-WantClockInOut1stLevel.png' % current_time):
+    if not driver.save_screenshot('%s%s-WantClockInOut1stLevel.png' % (screenshots_path, current_time)):
         print('save WantClockInOut1stLevel failed')
 
     # link items
@@ -89,7 +96,7 @@ def WantClockInOut2ndLevel():
         print("Timed out waiting for page to load")
 
     # debug purpose
-    if not driver.save_screenshot('/screenshots/%s-WantClockInOut2ndLevel.png' % current_time):
+    if not driver.save_screenshot('%s%s-WantClockInOut2ndLevel.png' % (screenshots_path, current_time)):
         print('save WantClockInOut2ndLevel failed')
 
     link_items = driver.find_elements(By.CLASS_NAME, 'ta_btn_cancel')
@@ -118,7 +125,7 @@ def SaveResult():
         print("Timed out waiting for page to load")
 
     time.sleep(timeout)
-    if not driver.save_screenshot('/screenshots/%s-Result.png' % current_time):
+    if not driver.save_screenshot('%s%s-Result.png' % (screenshots_path, current_time)):
         print('save Result failed')
 
 # login page
