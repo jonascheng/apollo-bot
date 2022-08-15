@@ -23,6 +23,7 @@ chrome_options.add_argument("--headless")
 chrome_options.add_argument("--disable-dev-shm-usage")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-remote-fonts")
+chrome_options.add_argument("--lang=zh-TW")
 
 screenshots_path = '/screenshots/'
 if platform.system() == 'Windows':
@@ -83,7 +84,11 @@ def WantClockInOut1stLevel():
         print('save WantClockInOut1stLevel failed')
 
     # link items
-    link_item = driver.find_element(By.LINK_TEXT, '我要打卡')
+    try:
+        link_item = driver.find_element(By.LINK_TEXT, '我要打卡')
+    except:
+        # fall back to English
+        link_item = driver.find_element(By.LINK_TEXT, 'Check in/out')
     link_item.click()
 
 def WantClockInOut2ndLevel():
