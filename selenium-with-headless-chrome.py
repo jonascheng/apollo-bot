@@ -136,3 +136,5 @@ WantClockInOut2ndLevel()
 # save result
 SaveResult()
 
+# terminate driver session and close all windows
+driver.quit()
