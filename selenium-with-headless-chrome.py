@@ -106,7 +106,7 @@ def WantClockInOut2ndLevel():
 
     link_items = driver.find_elements(By.CLASS_NAME, 'ta_btn_cancel')
     for link_item in link_items:
-        if link_item.text not in ['休息開始', 'break end']:
+        if link_item.text not in ['休息開始', 'break start', 'break end']:
             print("你已經點擊 [ %s ]" % link_item.text)
             link_item.click()
 
