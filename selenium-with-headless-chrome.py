@@ -96,7 +96,7 @@ def WantClockInOut2ndLevel():
 
     # wait for page loading
     try:
-        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'ta_btn_cancel')))
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'punch-window-location')))
     except TimeoutException:
         print("Timed out waiting for page to load")
 
@@ -104,20 +104,28 @@ def WantClockInOut2ndLevel():
     if not driver.save_screenshot('%s%s-WantClockInOut2ndLevel.png' % (screenshots_path, current_time)):
         print('save WantClockInOut2ndLevel failed')
 
-    link_items = driver.find_elements(By.CLASS_NAME, 'ta_btn_cancel')
-    for link_item in link_items:
-        if link_item.text not in ['休息開始', 'break start', 'break end']:
-            print("你已經點擊 [ %s ]" % link_item.text)
-            link_item.click()
+    # check if 'clock in' is available
+    btn_item = driver.find_element(By.CSS_SELECTOR, "button[class='button filled buttonText punch-window-button-work']")
+    btn_item.click()
+
+    # debug purpose
+    if not driver.save_screenshot('%s%s-AfterClickBtn.png' % (screenshots_path, current_time)):
+        print('save AfterClickBtn failed')
+
+    # link_items = driver.find_elements(By.CLASS_NAME, 'ta_btn_cancel')
+    # for link_item in link_items:
+    #     if link_item.text not in ['休息開始', 'break start', 'break end']:
+    #         print("你已經點擊 [ %s ]" % link_item.text)
+    #         link_item.click()
 
     # check if need to overwrite clock out record
     try:
-        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'win-box-button-bar')))
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'v3-confirm-buttons')))
     except TimeoutException:
         print("Timed out, no need to overwrite clock out record")
         return
 
-    btn_item = driver.find_element(By.CSS_SELECTOR, "button[class='ta_btn new__btn--fixed-height']")
+    btn_item = driver.find_element(By.CSS_SELECTOR, "button[class='button filled buttonText']")
     btn_item.click()
 
 def SaveResult():
@@ -125,7 +133,7 @@ def SaveResult():
 
     # wait for page loading
     try:
-        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'new-window-title')))
+        WebDriverWait(driver, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, 'punch-window-location')))
     except TimeoutException:
         print("Timed out waiting for page to load")
 
